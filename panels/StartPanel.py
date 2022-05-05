@@ -14,9 +14,9 @@ class StartPanel(QWidget):
 
     def UiSetup(self):
         # creating buttons
-        self.buttonUser = QPushButton("Uzytkownik")
+        #self.buttonUser = QPushButton("Uzytkownik")
         self.buttonUser.clicked.connect(self.on_buttonUser_clicked)
-        self.buttonLibrarian = QPushButton("Bibliotekarz")
+        #self.buttonLibrarian = QPushButton("Bibliotekarz")
         self.buttonLibrarian.clicked.connect(self.on_buttonLibrarian_clicked)
 
         # creating layout, adding buttons
