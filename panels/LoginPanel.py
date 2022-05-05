@@ -17,14 +17,14 @@ class LoginPanel(QWidget):
         self.buttonLogin = QPushButton("Zaloguj")
         self.buttonLogin.clicked.connect(self.on_buttonLogin_clicked)
 
-        self.buttonShow = QPushButton("Pokaz")
+        self.buttonShow = QPushButton("Pokaż")
         self.buttonShow.setCheckable(True)
         self.buttonShow.clicked.connect(self.on_buttonShow_clicked)
 
         self.labelName = QLabel("Login")
         self.lineEditUsername = QLineEdit()
 
-        self.labelPasswd = QLabel("Haslo")
+        self.labelPasswd = QLabel("Hasło")
         self.lineEditPasswd = QLineEdit()
         self.lineEditPasswd.setEchoMode(QLineEdit.EchoMode.Password)
 
@@ -49,11 +49,28 @@ class LoginPanel(QWidget):
         groupLayout.addWidget(widgetPasswd)
         groupLayout.addWidget(self.buttonLogin)
         groupBoxLogin.setLayout(groupLayout)
+        groupBoxLogin.setMaximumHeight(300)
+        groupBoxLogin.setMaximumWidth(300)
+        #sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        #sizePolicy.setHeightForWidth(True)
+        #groupBoxLogin.setSizePolicy(sizePolicy)
+        # groupBoxLogin.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding, QSizePolicy.setHeightForWidth(True))
 
         # creating final layout
-        layout = QVBoxLayout()
-        layout.addWidget(groupBoxLogin)
-        self.setLayout(layout)
+        # layout = QVBoxLayout()
+        # layout.addWidget(groupBoxLogin)
+        # self.setLayout(layout)
+        vSpacerUp = QSpacerItem(20, 40, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding)
+        vSpacerBottom = QSpacerItem(20, 40, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding)
+        hSpacerLeft = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        hSpacerRight = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        layoutLoginBox = QGridLayout()
+        layoutLoginBox.addWidget(groupBoxLogin, 1, 1)
+        layoutLoginBox.addItem(vSpacerUp, 0, 1)
+        layoutLoginBox.addItem(vSpacerBottom, 2, 1)
+        layoutLoginBox.addItem(hSpacerLeft, 1, 0)
+        layoutLoginBox.addItem(hSpacerRight, 1, 2)
+        self.setLayout(layoutLoginBox)
 
     def UiWizard(self):
         self.buttonLogin.setStyleSheet("background-color: {}".format(Pallete.buttonColor))
@@ -69,4 +86,3 @@ class LoginPanel(QWidget):
             self.lineEditPasswd.setEchoMode(QLineEdit.EchoMode.Normal)
         else:
             self.lineEditPasswd.setEchoMode(QLineEdit.EchoMode.Password)
-

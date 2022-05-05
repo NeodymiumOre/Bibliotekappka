@@ -16,6 +16,8 @@ class LibrarianPanel(QWidget):
         super().__init__()
         self.MainWindow = MainWindow
 
+        self.userType = User.Librarian
+
         # creating layout
         self.UiSetup()
         # setting up layout design
@@ -25,13 +27,13 @@ class LibrarianPanel(QWidget):
         # creating buttons
         buttonSearch = QPushButton("Szukaj")
         buttonSearch.clicked.connect(self.on_buttonSearch_clicked)
-        buttonAddUser = QPushButton("Dodaj uzytkownika")
+        buttonAddUser = QPushButton("Dodaj użytkownika")
         buttonAddUser.clicked.connect(self.on_buttonAddUser_clicked)
-        buttonRemoveUser = QPushButton("Usun uzytkownika")
+        buttonRemoveUser = QPushButton("Usuń użytkownika")
         buttonRemoveUser.clicked.connect(self.on_buttonRemoveUser_clicked)
-        buttonAddItem = QPushButton("Dodaj egzemplarz ksiazki")
+        buttonAddItem = QPushButton("Dodaj egzemplarz książki")
         buttonAddItem.clicked.connect(self.on_buttonAddItem_clicked)
-        buttonAddBook = QPushButton("Dodaj ksiazke")
+        buttonAddBook = QPushButton("Dodaj książkę")
         buttonAddBook.clicked.connect(self.on_buttonAddBook_clicked)
 
         # creating side menu
@@ -45,7 +47,7 @@ class LibrarianPanel(QWidget):
         groupBoxMenu.setLayout(layoutMenu)
 
         # creating tabs for stacking
-        self.searchTab = SearchTab()
+        self.searchTab = SearchTab(self.userType)
         self.addUserTab = AddUserTab()
         self.removeUserTab = RemoveUserTab()
         self.addItemTab = AddItemTab()

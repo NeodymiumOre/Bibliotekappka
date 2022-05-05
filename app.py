@@ -1,9 +1,9 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtGui import *
-from PyQt6.QtCore import *
 import sys
-from Ui import *
+from MainWindow import *
 
 app = QApplication(sys.argv)
-window = Ui()
+
+window = MainWindow()
+
+window.show()
 app.exec()

@@ -21,7 +21,7 @@
     <item>
      <widget class="QStackedWidget" name="Stack">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="startPanel">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -271,7 +271,7 @@
         <item>
          <widget class="QStackedWidget" name="stackedWidgetFunctions">
           <property name="currentIndex">
-           <number>4</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="SearchTab">
            <layout class="QVBoxLayout" name="verticalLayout_7">
