@@ -15,8 +15,12 @@ class LibrarianPanel(QWidget):
     def __init__(self, MainWindow):
         super().__init__()
         self.MainWindow = MainWindow
+        self.db = self.MainWindow.db
 
+        # setting user as librarian
         self.userType = User.Librarian
+        # remembering username or none for reader
+        self.userAccount = "xd"
 
         # creating layout
         self.UiSetup()
@@ -49,7 +53,7 @@ class LibrarianPanel(QWidget):
         # creating tabs for stacking
         self.searchTab = SearchTab(self.userType)
         self.addUserTab = AddUserTab()
-        self.removeUserTab = RemoveUserTab()
+        self.removeUserTab = RemoveUserTab(self.userAccount)
         self.addItemTab = AddItemTab()
         self.addBookTab = AddBookTab()
 

@@ -9,10 +9,13 @@ from panels.LoginPanel import *
 from panels.UserPanel import *
 from panels.LibrarianPanel import *
 from palette import *
+sys.path.insert(0, './db')
+from db.database import *
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.db = Database()
 
         # creating layout
         self.UiSetup()

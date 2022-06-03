@@ -6,6 +6,7 @@ class LoginPanel(QWidget):
     def __init__(self, MainWindow):
         super().__init__()
         self.MainWindow = MainWindow
+        self.db = self.MainWindow.db
 
         # creating layout
         self.UiSetup()
@@ -28,6 +29,9 @@ class LoginPanel(QWidget):
         self.lineEditPasswd = QLineEdit()
         self.lineEditPasswd.setEchoMode(QLineEdit.EchoMode.Password)
 
+        self.labelWrongPasswd = QLabel("")
+        self.labelWrongPasswd.hide()
+
         # creating layout with labels
         widgetName = QWidget()
         layoutName = QHBoxLayout()
@@ -45,6 +49,7 @@ class LoginPanel(QWidget):
         # creating layout in groupBoxLogin
         groupBoxLogin = QGroupBox("Login")
         groupLayout = QVBoxLayout()
+        groupLayout.addWidget(self.labelWrongPasswd)
         groupLayout.addWidget(widgetName)
         groupLayout.addWidget(widgetPasswd)
         groupLayout.addWidget(self.buttonLogin)
@@ -72,14 +77,29 @@ class LoginPanel(QWidget):
         layoutLoginBox.addItem(hSpacerRight, 1, 2)
         self.setLayout(layoutLoginBox)
 
+        # DB connection and auto_reflect
+        self.db.connect("root", "maciej")
+        self.db.get_tables()
+
     def UiWizard(self):
         self.buttonLogin.setStyleSheet("background-color: {}".format(Pallete.buttonColor))
 
     def on_buttonLogin_clicked(self):
-        print(self.lineEditUsername.displayText())
-        print(self.lineEditPasswd.displayText())
-        self.MainWindow.Stack.setCurrentIndex(self.MainWindow.LibrarianPIndex)
-        self.setWindowFlag(Qt.WindowType.WindowTitleHint)
+        username = self.lineEditUsername.text()
+        password = self.lineEditPasswd.text()
+        result = self.db.session.query(self.db.Bibliotekarze).filter_by(Login = username).all()
+
+        if len(result) != 0 and result[0].Haslo == password:
+            self.MainWindow.Stack.setCurrentIndex(self.MainWindow.LibrarianPIndex)
+            self.setWindowFlag(Qt.WindowType.WindowTitleHint) ## ???
+            self.db.disconnect()
+            self.db.connect("librarian", "librarian")
+            self.db.get_tables() ## usunąć to ???
+        else:
+            self.labelWrongPasswd.show()
+            self.labelWrongPasswd.setText("Invalid username or password.")
+            self.labelWrongPasswd.setStyleSheet("QLabel {color : red; }")
+            result.clear()
 
     def on_buttonShow_clicked(self):
         if self.buttonShow.isChecked():

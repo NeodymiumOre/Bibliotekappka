@@ -4,7 +4,9 @@
 - dodać custom widget dla hasła
 - sprawdzanie poprawności hasła
 - dodać gdzieś podgląd zalogowanego bibliotekarza
-
+- jak się nie uda zalogować do bazy to dac jakieś info o tym
+- dodać przycisk wylogowania dla bibliotekarza
+- 
 
 pytania do tabów u bibliotekarza:
 - usuwanie użytkowników: wpisywać dane użytkownika + potwierdzenie jego istnienia, czy wyświetlić listę użytkowników i przycisk usuń użytkownika jak przy rezerwacjach

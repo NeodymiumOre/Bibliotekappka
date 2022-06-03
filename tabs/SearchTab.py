@@ -68,6 +68,7 @@ class SearchTab(QWidget):
         # creating list of items (maybe for operating on db in mirai)
         # searchingResults = []
 
+        # adding items to QListWidget
         for number in range(1, 12):
             item = QListWidgetItem(self.listResults)
             self.listResults.addItem(item)

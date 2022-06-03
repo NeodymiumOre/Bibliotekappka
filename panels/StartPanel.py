@@ -1,11 +1,16 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
+from db.database import Database
 from palette import *
+import sys
+# sys.path.insert(0, './db')
+# from db.database import *
 
 class StartPanel(QWidget):
     def __init__(self, MainWindow):
         super().__init__()
         self.MainWindow = MainWindow
+        self.db = self.MainWindow.db
 
         # creating layout
         self.UiSetup()
@@ -31,6 +36,7 @@ class StartPanel(QWidget):
         self.buttonLibrarian.setStyleSheet("background-color: {}".format(Pallete.buttonColor))
 
     def on_buttonUser_clicked(self):
+        self.db.connect('reader', 'reader')
         self.MainWindow.Stack.setCurrentIndex(self.MainWindow.UserPIndex)
 
     def on_buttonLibrarian_clicked(self):

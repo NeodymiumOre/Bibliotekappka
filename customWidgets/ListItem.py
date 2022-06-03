@@ -30,10 +30,12 @@ class ListItem(QWidget):
         # creating items for reserving enrollment
         self.lineEditUserIdR = QLineEdit()
         self.buttonReserveAccept = QPushButton("Zatwierdź rezerwację")
+        self.buttonReserveAccept.clicked.connect(self.on_buttonReserveAccept_clicked)
 
         # creating items for lending enrollment
         self.lineEditUserIdL = QLineEdit()
         self.buttonLendAccept = QPushButton("Zatwierdź wypożyczenie")
+        self.buttonLendAccept.clicked.connect(self.on_buttonLendAccept_clicked)
 
         # creating widget for reserving enrollment
         self.enrollmentR = QWidget()
@@ -102,6 +104,12 @@ class ListItem(QWidget):
             self.enrollmentL.setHidden(True)
             self.setMinimumSize(self.basic.sizeHint())
             self.item.setSizeHint(self.minimumSizeHint())
+
+    def on_buttonReserveAccept_clicked(self):
+        print("reserve done")
+
+    def on_buttonLendAccept_clicked(self):
+        print("lend done")
         
 
 

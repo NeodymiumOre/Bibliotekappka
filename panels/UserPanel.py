@@ -9,7 +9,7 @@ class UserPanel(QWidget):
     def __init__(self, MainWindow):
         super().__init__()
         self.MainWindow = MainWindow
-
+        self.db = self.MainWindow.db
         self.userType = User.Reader
 
         # creating layout
