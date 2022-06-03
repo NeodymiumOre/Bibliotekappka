@@ -2,8 +2,10 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 
 class AddItemTab(QWidget):
-    def __init__(self):
+    def __init__(self, MainWindow):
         super().__init__()
+        self.MainWindow = MainWindow
+        self.db = self.MainWindow.db
 
         # creating layout
         self.UiSetup()

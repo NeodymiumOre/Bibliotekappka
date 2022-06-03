@@ -19,7 +19,7 @@ class UserPanel(QWidget):
 
     def UiSetup(self):
         # creating searching widget
-        searchWidget = SearchTab(self.userType)
+        searchWidget = SearchTab(self.MainWindow, self.userType)
         layout = QVBoxLayout()
         layout.addWidget(searchWidget)
         self.setLayout(layout)

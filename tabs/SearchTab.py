@@ -7,9 +7,12 @@ from customWidgets.ListItem import *
 from enums import User
 
 class SearchTab(QWidget):
-    def __init__(self, userType):
-        self.userType = userType
+    def __init__(self, MainWindow, userType):
         super().__init__()
+        self.userType = userType
+        self.MainWindow = MainWindow
+        self.db = self.MainWindow.db
+        self.results = None
 
         self.options = {
             'Tytuł':0,
@@ -63,19 +66,29 @@ class SearchTab(QWidget):
 
     def on_buttonSearch_clicked(self):
         self.listResults.clear()
-        print(self.lineEditSearch.displayText())
+        phrase = self.lineEditSearch.displayText()
 
-        # creating list of items (maybe for operating on db in mirai)
-        # searchingResults = []
+        # getting list of items from database
+        if self.comboBoxSearch.currentIndex() == 0:
+            self.results = self.db.session.query(self.db.Ksiazki).filter(self.db.Ksiazki.Tytul.like(f"{phrase}%")).all()
+        elif self.comboBoxSearch.currentIndex() == 1:
+            self.results = self.db.session.query(self.db.Ksiazki).filter(self.db.Ksiazki.Autor.like(f"{phrase}%")).all()
+        elif self.comboBoxSearch.currentIndex() == 2:
+            self.results = self.db.session.query(self.db.Ksiazki).filter(self.db.Ksiazki.Kategoria.like(f"{phrase}%")).all()
+        elif self.comboBoxSearch.currentIndex() == 3:
+            self.results = self.db.session.query(self.db.Ksiazki).filter(self.db.Ksiazki.Wydawnictwo.like(f"{phrase}%")).all()
 
-        # adding items to QListWidget
-        for number in range(1, 12):
-            item = QListWidgetItem(self.listResults)
-            self.listResults.addItem(item)
-            row = ListItem(self.lineEditSearch.displayText() + str(number), item, self.userType)
-            row.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-            item.setSizeHint(row.minimumSizeHint())
-            self.listResults.setItemWidget(item, row)
+        # if there are any items, print them
+        if len(self.results) != 0:
+            # adding items to QListWidget
+            for book in self.results:
+                # adding ItemWidget to the ListWidget
+                item = QListWidgetItem(self.listResults)
+                self.listResults.addItem(item)
+                row = ListItem(book.Tytul, item, self.userType)
+                row.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+                item.setSizeHint(row.minimumSizeHint())
+                self.listResults.setItemWidget(item, row)
 
         # # creating item of type QListWidgetItem
         # self.item1 = QListWidgetItem(self.listResults)

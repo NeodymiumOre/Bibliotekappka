@@ -51,11 +51,11 @@ class LibrarianPanel(QWidget):
         groupBoxMenu.setLayout(layoutMenu)
 
         # creating tabs for stacking
-        self.searchTab = SearchTab(self.userType)
-        self.addUserTab = AddUserTab()
-        self.removeUserTab = RemoveUserTab(self.userAccount)
-        self.addItemTab = AddItemTab()
-        self.addBookTab = AddBookTab()
+        self.searchTab = SearchTab(self.MainWindow, self.userType)
+        self.addUserTab = AddUserTab(self.MainWindow)
+        self.removeUserTab = RemoveUserTab(self.MainWindow, self.userAccount)
+        self.addItemTab = AddItemTab(self.MainWindow)
+        self.addBookTab = AddBookTab(self.MainWindow)
 
         # creating stacked widget and index of the panels
         self.Stack = QStackedWidget(self)

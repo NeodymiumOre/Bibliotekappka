@@ -6,9 +6,12 @@ from customWidgets.ListItem import *
 from enums import User
 
 class RemoveUserTab(QWidget):
-    def __init__(self, userAccount):
-        self.userAccount = userAccount
+    def __init__(self, MainWindow, userAccount):
         super().__init__()
+        self.userAccount = userAccount
+        self.MainWindow = MainWindow
+        self.db = self.MainWindow.db
+        self.results
 
         self.options = {
             'ID':0,
@@ -62,19 +65,28 @@ class RemoveUserTab(QWidget):
 
     def on_buttonSearch_clicked(self):
         self.listResults.clear()
-        print(self.lineEditSearch.displayText())
+        phrase = self.lineEditSearch.displayText()
 
-        # creating list of items (maybe for operating on db in mirai)
-        # searchingResults = []
+        # getting list of items from database
+        if self.comboBoxSearch.currentIndex() == 0:
+            self.results = self.db.session.query(self.db.Czytelnicy).filter(self.db.Czytelnicy.Id_karty.like(f"{phrase}%")).all()
+        elif self.comboBoxSearch.currentIndex() == 1:
+            self.results = self.db.session.query(self.db.Czytelnicy).filter(self.db.Czytelnicy.Imie.like(f"{phrase}%")).all()
+        elif self.comboBoxSearch.currentIndex() == 2:
+            self.results = self.db.session.query(self.db.Czytelnicy).filter(self.db.Czytelnicy.Nazwisko.like(f"{phrase}%")).all()
+        elif self.comboBoxSearch.currentIndex() == 3:
+            self.results = self.db.session.query(self.db.Czytelnicy).filter(self.db.Czytelnicy.Adres.like(f"{phrase}%")).all()
 
-        # adding items to QListWidget
-        for number in range(1, 12):
-            item = QListWidgetItem(self.listResults)
-            self.listResults.addItem(item)
-            row = ListItem(self.lineEditSearch.displayText() + str(number), item, User.Librarian)
-            row.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-            item.setSizeHint(row.minimumSizeHint())
-            self.listResults.setItemWidget(item, row)
+        # if there are any items, print them
+        if len(self.results) != 0:
+            # adding items to QListWidget
+            for user in self.results:
+                item = QListWidgetItem(self.listResults)
+                self.listResults.addItem(item)
+                row = ListItem(user.Imie, item, User.Librarian)
+                row.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+                item.setSizeHint(row.minimumSizeHint())
+                self.listResults.setItemWidget(item, row)
 
         # # creating item of type QListWidgetItem
         # self.item1 = QListWidgetItem(self.listResults)
