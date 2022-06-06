@@ -13,13 +13,41 @@ class AddItemTab(QWidget):
         self.UiWizard()
 
     def UiSetup(self):
-        # xdxd
-        button = QPushButton("Dodaj egzemplarz książki")
+        # adding elements to QFormLayout
+        self.labelTitle = QLabel("Tytuł")
+        self.lineEditTite = QLineEdit()
+        self.labelPublisher = QLabel("Wydawnictwo")
+        self.lineEditPublisher = QLineEdit()
 
-        # creating main layout
-        layout = QVBoxLayout()
-        layout.addWidget(button)
-        self.setLayout(layout)
+        # mniejszy layout
+        self.lilWidget = QWidget()
+        self.formLayout = QFormLayout()
+        self.formLayout.addWidget(self.labelTitle)
+        self.formLayout.addWidget(self.lineEditTite)
+        self.formLayout.addWidget(self.labelPublisher)
+        self.formLayout.addWidget(self.lineEditPublisher)
+        self.lilWidget.setLayout(self.formLayout)
+
+        # bardziej ogólny layout
+        self.tabWidget = QWidget()
+        self.tabLayout = QHBoxLayout()
+        self.tabLayout.addWidget(self.lilWidget)
+        self.tabWidget.setLayout(self.tabLayout)
+
+        self.buttonAdd = QPushButton("Dodaj Egzemplarz")
+        self.buttonAdd.clicked.connect(self.on_buttonAdd_clicked)
 
     def UiWizard(self):
         pass
+
+        # creating main layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.tabWidget)
+        layout.addWidget(self.buttonAdd)
+        self.setLayout(layout)
+
+    def on_buttonAdd_clicked(self):
+        Tytul = self.lineEditTite.text()
+        Wydawnictwo = self.lineEditPublisher.text()
+
+        self.db.Add_egzemplarz(Tytul, Wydawnictwo)

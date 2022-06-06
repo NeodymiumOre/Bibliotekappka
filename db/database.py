@@ -59,8 +59,8 @@ class Database():
 
     def deleteAllFromTable(self, table):
         print(table)
-        self.db.session.execute(text(f"DELETE FROM {table};"))
-        self.db.session.commit()
+        self.session.execute(text(f"DELETE FROM {table};"))
+        self.session.commit()
 
     def resetIndexInTable(self, table):
         print(table)
@@ -96,41 +96,49 @@ class Database():
 
     def UsunWypozyczenie(self, Wypozyczenie):
         instr = text(f"CALL UsunWypozyczenie ('{Wypozyczenie}') ;")
-        self.db.session.execute(instr)
-        self.db.session.commit()
+        self.session.execute(instr)
+        self.session.commit()
     
     def UsunRezerwacje(self, Rezerwacja):
         instr = text(f"CALL UsunRezerwacje ('{Rezerwacja}') ;")
-        self.db.session.execute(instr)
-        self.db.session.commit()
+        self.session.execute(instr)
+        self.session.commit()
 
     def DodawanieWypozyczenia(self, Karta, Egzemplarz, Bibliotekarz):
-        instr = text(f"CALL DodawanieWypozyczenia ('{Karta}', '{Egzemplarz}', '{Bibliotekarz}') ;")
-        self.db.session.execute(instr)
-        self.db.session.commit()
+        instr = text(f"CALL DodawanieWypozyczenia ({Karta}, '{Egzemplarz}', '{Bibliotekarz}') ;")
+        self.session.execute(instr)
+        self.session.commit()
 
     def DodawanieRezerwacji(self, Karta, Tytul):
         instr = text(f"CALL DodawanieRezerwacji ('{Karta}', '{Tytul}') ;")
-        self.db.session.execute(instr)
-        self.db.session.commit()
+        self.session.execute(instr)
+        self.session.commit()
 
     def DodawanieKsiazki(self, Imie, Nazwisko, Nazwa, Numer, Rok, Kategoria, Wydawnictwo):
         instr = text(f"""CALL DodawanieKsiazki ('{Imie}', '{Nazwisko}', '{Nazwa}', '{Numer}', '{Rok}', 
-        {Kategoria}, '{Wydawnictwo}') ;""")
-        self.db.session.execute(instr)
-        self.db.session.commit()
+        '{Kategoria}', '{Wydawnictwo}') ;""")
+        self.session.execute(instr)
+        self.session.commit()
 
     def DodawanieCzytelnika(self, Imie, Nazwisko, Miasto, Kod, Ulica, Numer, Telefon, Email):
         instr = text(f"""CALL DodawanieCzytelnika ('{Imie}', '{Nazwisko}', '{Miasto}', '{Kod}', '{Ulica}', 
         {Numer}, '{Telefon}', '{Email}') ;""")
-        self.db.session.execute(instr)
-        self.db.session.commit()
+        self.session.execute(instr)
+        self.session.commit()
 
     def DodawanieBibliotekarza(self, Imie, Nazwisko, Miasto, Kod, Ulica, Numer, Telefon, Email, Login, Haslo):
         instr = text(f"""CALL DodawanieBibliotekarza ('{Imie}', '{Nazwisko}', '{Miasto}', '{Kod}', '{Ulica}', 
         {Numer}, '{Telefon}', '{Email}', '{Login}', '{Haslo}') ;""")
-        self.db.session.execute(instr)
-        self.db.session.commit()
+        self.session.execute(instr)
+        self.session.commit()
+
+    def UsunCzytelnika(self, Karta, Imie):
+        instr = text(f"""CALL UsunCzytelnika ('{Karta}') ;""")
+        self.session.execute(instr)
+        self.session.commit()
+        instr = text(f"""  delete from Osoby where Imie='{Imie}';""")
+        self.session.execute(instr)
+        self.session.commit()
 
 ##################################################################################################################################
 
@@ -140,11 +148,15 @@ class Database():
     def Add_autor():
         pass
 
-
+    def Add_egzemplarz(self, Tytul, Wydawnictwo):
+        instr = text(f"""SELECT Add_egzemplarz ('{Tytul}', '{Wydawnictwo}') FROM DUAL ;""")
+        self.session.execute(instr)
+        self.session.commit()
 
 
 if __name__ == "__main__":
-    db = Database("root", "maciej")
-    db.connect()
+    db = Database()
+    db.connect("root", "maciej")
     db.get_tables()
-    db.print_tables()
+    #db.print_tables()
+    db.DodawanieCzytelnika('Krzysztof', 'Barna', 'Poznan', '60-682', 'smialego', 5, '756354657', 'kszykszy@gmail.com')

@@ -1,13 +1,15 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
-from enums import User
+from enums import Mode
 
 class ListItem(QWidget):
-    def __init__(self, ItemName, item, userType, parent=None):
+    def __init__(self, db, ItemName, item, mode, LibrarianName, parent=None):
+        self.db = db
         self.ItemName = ItemName
         self.item = item
-        self.userType = userType
+        self.mode = mode
+        self.LibrarianName = LibrarianName
         super(ListItem, self).__init__(parent)
 
         # creating layout
@@ -18,13 +20,16 @@ class ListItem(QWidget):
     def UiSetup(self):
         # creating basic elements
         self.labelName = QLabel(self.ItemName)
+        self.buttonDelete = QPushButton("Usuń użytkownika")
+        self.buttonDelete.clicked.connect(self.on_buttonDelete_clicked)
+        self.labelName2 = QLabel(self.ItemName)
         self.buttonReserve = QPushButton("Rezerwuj")
         self.buttonReserve.setCheckable(True)
         self.buttonReserve.clicked.connect(self.on_buttonReserve_clicked)
         self.buttonLend = QPushButton("Wypożycz")
         self.buttonLend.setCheckable(True)
         self.buttonLend.clicked.connect(self.on_buttonLend_clicked)
-        if self.userType == User.Reader:
+        if self.mode == Mode.Reader:
             self.buttonLend.setHidden(True)
 
         # creating items for reserving enrollment
@@ -51,22 +56,34 @@ class ListItem(QWidget):
         self.layoutEnrollL.addWidget(self.buttonLendAccept)
         self.enrollmentL.setLayout(self.layoutEnrollL)
 
-        # creating basic widget
+        # creating basic widget for lending and reserving
         self.basic = QWidget()
         self.layoutListItem = QHBoxLayout()
         self.layoutListItem.addWidget(self.labelName)
+        print(self.labelName.text())
         self.layoutListItem.addWidget(self.buttonLend)
         self.layoutListItem.addWidget(self.buttonReserve)
         self.basic.setLayout(self.layoutListItem)
 
+        self.delete = QWidget()
+        self.layoutDelete = QHBoxLayout()
+        self.layoutDelete.addWidget(self.labelName2)
+        self.layoutDelete.addWidget(self.buttonDelete)
+        self.delete.setLayout(self.layoutDelete)
+
         # creating final layout
-        self.layoutFinal = QVBoxLayout()
-        self.layoutFinal.addWidget(self.basic)
-        self.layoutFinal.addWidget(self.enrollmentR)
-        self.layoutFinal.addWidget(self.enrollmentL)
-        self.enrollmentR.setHidden(True)
-        self.enrollmentL.setHidden(True)
-        self.setLayout(self.layoutFinal)
+        if self.mode == Mode.Delete:
+            self.layoutFinal = QVBoxLayout()
+            self.layoutFinal.addWidget(self.delete)
+            self.setLayout(self.layoutFinal)
+        else:
+            self.layoutFinal = QVBoxLayout()
+            self.layoutFinal.addWidget(self.basic)
+            self.layoutFinal.addWidget(self.enrollmentR)
+            self.layoutFinal.addWidget(self.enrollmentL)
+            self.enrollmentR.setHidden(True)
+            self.enrollmentL.setHidden(True)
+            self.setLayout(self.layoutFinal)
 
     def UiWizard(self):
         pass
@@ -105,11 +122,17 @@ class ListItem(QWidget):
             self.setMinimumSize(self.basic.sizeHint())
             self.item.setSizeHint(self.minimumSizeHint())
 
+    def on_buttonDelete_clicked(self):
+        karta = self.labelName.text().split(' ')[2]
+        imie = self.labelName.text().split(' ')[0]
+        self.db.UsunCzytelnika(karta, imie)
+
     def on_buttonReserveAccept_clicked(self):
-        print("reserve done")
+        self.db.DodawanieRezerwacji(self.lineEditUserIdR.text(), self.ItemName)
 
     def on_buttonLendAccept_clicked(self):
-        print("lend done")
+        result = self.db.session.query(self.db.Bibliotekarze).filter(self.db.Bibliotekarze.Login.like(f"{self.LibrarianName}")).one()
+        self.db.DodawanieWypozyczenia(self.lineEditUserIdL.text(), 1, result.Id_bibliotekarza)
         
 
 

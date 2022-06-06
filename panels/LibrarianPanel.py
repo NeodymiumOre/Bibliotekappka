@@ -17,8 +17,6 @@ class LibrarianPanel(QWidget):
         self.MainWindow = MainWindow
         self.db = self.MainWindow.db
 
-        # setting user as librarian
-        self.userType = User.Librarian
         # remembering username or none for reader
         self.userAccount = "xd"
 
@@ -51,9 +49,9 @@ class LibrarianPanel(QWidget):
         groupBoxMenu.setLayout(layoutMenu)
 
         # creating tabs for stacking
-        self.searchTab = SearchTab(self.MainWindow, self.userType)
+        self.searchTab = SearchTab(self.MainWindow, Mode.Librarian)
         self.addUserTab = AddUserTab(self.MainWindow)
-        self.removeUserTab = RemoveUserTab(self.MainWindow, self.userAccount)
+        self.removeUserTab = RemoveUserTab(self.MainWindow, Mode.Delete)
         self.addItemTab = AddItemTab(self.MainWindow)
         self.addBookTab = AddBookTab(self.MainWindow)
 

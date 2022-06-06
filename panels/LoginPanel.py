@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from palette import *
+from sqlalchemy import inspect
 
 class LoginPanel(QWidget):
     def __init__(self, MainWindow):
@@ -92,9 +93,9 @@ class LoginPanel(QWidget):
         if len(result) != 0 and result[0].Haslo == password:
             self.MainWindow.Stack.setCurrentIndex(self.MainWindow.LibrarianPIndex)
             self.setWindowFlag(Qt.WindowType.WindowTitleHint) ## ???
-            self.db.disconnect()
+            self.db.conn.close()
             self.db.connect("librarian", "librarian")
-            self.db.get_tables() ## usunąć to ???
+            self.MainWindow.LibrarianName = username
         else:
             self.labelWrongPasswd.show()
             self.labelWrongPasswd.setText("Invalid username or password.")
