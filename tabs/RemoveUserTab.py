@@ -105,7 +105,7 @@ class RemoveUserTab(QWidget):
             for user in self.results:
                 item = QListWidgetItem(self.listResults)
                 self.listResults.addItem(item)
-                row = ListItem(self.db, f"{user.Imie} {user.Nazwisko} {user.Id_karty}", item, Mode.Delete)
+                row = ListItem(self.db, f"{user.Imie} {user.Nazwisko} {user.Id_karty}", item, Mode.Delete, self.MainWindow.LibrarianName)
                 row.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
                 item.setSizeHint(row.minimumSizeHint())
                 self.listResults.setItemWidget(item, row)

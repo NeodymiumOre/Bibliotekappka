@@ -14,6 +14,7 @@ class AddItemTab(QWidget):
 
     def UiSetup(self):
         # adding elements to QFormLayout
+        self.warning = QLabel("")
         self.labelTitle = QLabel("Tytuł")
         self.lineEditTite = QLineEdit()
         self.labelPublisher = QLabel("Wydawnictwo")
@@ -22,6 +23,7 @@ class AddItemTab(QWidget):
         # mniejszy layout
         self.lilWidget = QWidget()
         self.formLayout = QFormLayout()
+        self.formLayout.addWidget(self.warning)
         self.formLayout.addWidget(self.labelTitle)
         self.formLayout.addWidget(self.lineEditTite)
         self.formLayout.addWidget(self.labelPublisher)
@@ -50,4 +52,10 @@ class AddItemTab(QWidget):
         Tytul = self.lineEditTite.text()
         Wydawnictwo = self.lineEditPublisher.text()
 
-        self.db.Add_egzemplarz(Tytul, Wydawnictwo)
+        if Tytul == '' or Wydawnictwo == '':
+            self.warning.setText("Don't leave blank lines!")
+            self.warning.setStyleSheet("QLabel {color : red; }")
+        else:
+            self.db.Add_egzemplarz(Tytul, Wydawnictwo)
+            self.warning.setText("Position added to library!")
+            self.warning.setStyleSheet("QLabel {color : black; }")

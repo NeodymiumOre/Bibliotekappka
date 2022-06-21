@@ -15,6 +15,7 @@ class AddUserTab(QWidget):
 
     def UiSetup(self):
         # adding elements to QFormLayout
+        self.warning = QLabel("")
         self.labelName = QLabel("Imię")
         self.lineEditName = QLineEdit()
         self.labelSurname = QLabel("Nazwisko")
@@ -24,7 +25,7 @@ class AddUserTab(QWidget):
         self.labelPostcode = QLabel("Kod pocztowy")
         self.lineEditPostCode = QLineEdit()
         self.labelStreet = QLabel("Ulica")
-        self.lineEditStreet = QLineEdit()
+        self.lineEditStreet = QLineEdit(
         self.labelNumber = QLabel("Numer")
         self.lineEditNumber = QLineEdit()
         self.labelPhone = QLabel("Telefon")
@@ -33,42 +34,39 @@ class AddUserTab(QWidget):
         self.lineEditEmail = QLineEdit()
 
         # mniejszy layout
-        self.cycki = QWidget()
-        self.dupaForm = QFormLayout()
-        self.dupaForm.addWidget(self.labelName)
-        self.dupaForm.addWidget(self.lineEditName)
-        self.dupaForm.addWidget(self.labelSurname)
-        self.dupaForm.addWidget(self.lineEditSurname)
-        self.dupaForm.addWidget(self.labelCity)
-        self.dupaForm.addWidget(self.lineEditCity)
-        self.dupaForm.addWidget(self.labelPostcode)
-        self.dupaForm.addWidget(self.lineEditPostCode)
-        self.dupaForm.addWidget(self.labelStreet)
-        self.dupaForm.addWidget(self.lineEditStreet)
-        self.dupaForm.addWidget(self.labelNumber)
-        self.dupaForm.addWidget(self.lineEditNumber)
-        self.dupaForm.addWidget(self.labelPhone)
-        self.dupaForm.addWidget(self.lineEditPhone)
-        self.dupaForm.addWidget(self.labelEmail)
-        self.dupaForm.addWidget(self.lineEditEmail)
-        self.cycki.setLayout(self.dupaForm)
+        self.dy = QWidget()
+        self.xdForm = QFormLayout()
+        self.xdForm.addWidget(self.warning)
+        self.xdForm.addWidget(self.labelName)
+        self.xdForm.addWidget(self.lineEditName)
+        self.xdForm.addWidget(self.labelSurname)
+        self.xdForm.addWidget(self.lineEditSurname)
+        self.xdForm.addWidget(self.labelCity)
+        self.xdForm.addWidget(self.lineEditCity)
+        self.xdForm.addWidget(self.labelPostcode)
+        self.xdForm.addWidget(self.lineEditPostCode)
+        self.xdForm.addWidget(self.labelStreet)
+        self.xdForm.addWidget(self.lineEditStreet)
+        self.xdForm.addWidget(self.labelNumber)
+        self.xdForm.addWidget(self.lineEditNumber)
+        self.xdForm.addWidget(self.labelPhone)
+        self.xdForm.addWidget(self.lineEditPhone)
+        self.xdForm.addWidget(self.labelEmail)
+        self.xdForm.addWidget(self.lineEditEmail)
+        self.dy.setLayout(self.xdForm)
 
         # bardziej ogólny layout
-        self.cycekMniejszy = QWidget()
-        self.dupa = QHBoxLayout()
-        # self.spacerL = QSpacerItem(40, 10)
-        # self.dupa.addWidget(self.spacerL)
-        self.dupa.addWidget(self.cycki)
-        # self.spacerR = QSpacerItem(40, 10)
-        # self.dupa.addWidget(self.spacerR)
-        self.cycekMniejszy.setLayout(self.dupa)
+        self.dy = QWidget()
+        self.ll = QHBoxLayout()
+        self.ll.addWidget(self.dy)
+        self.dy.setLayout(self.ll)
 
         self.buttonAdd = QPushButton("Dodaj użytkownika")
         self.buttonAdd.clicked.connect(self.on_buttonAdd_clicked)
 
         # creating main layout
         layout = QVBoxLayout()
-        layout.addWidget(self.cycekMniejszy)
+        layout.addWidget(self.dy)
         layout.addWidget(self.buttonAdd)
         self.setLayout(layout)
 
@@ -85,5 +83,11 @@ class AddUserTab(QWidget):
         Telefon = self.lineEditPhone.text()
         Email = self.lineEditEmail.text()
 
-        self.db.DodawanieCzytelnika(Imie, Nazwisko, Miasto, Kod, Ulica, Numer, Telefon, Email)
+        if Imie=='' or Nazwisko=='' or Miasto=='' or Kod=='' or Ulica=='' or Numer=='' or Telefon=='' or Email=='':
+            self.warning.setText("Don't leave blank lines!")
+            self.warning.setStyleSheet("QLabel {color : red; }")
+        else:
+            self.db.DodawanieCzytelnika(Imie, Nazwisko, Miasto, Kod, Ulica, Numer, Telefon, Email)
+            self.warning.setText("User added")
+            self.warning.setStyleSheet("QLabel {color : black; }")
 

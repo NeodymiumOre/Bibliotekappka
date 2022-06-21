@@ -14,6 +14,7 @@ class AddBookTab(QWidget):
 
     def UiSetup(self):
         # adding elements to QFormLayout
+        self.warning = QLabel("")
         self.labelName = QLabel("Imię")
         self.lineEditName = QLineEdit()
         self.labelSurname = QLabel("Nazwisko")
@@ -31,39 +32,36 @@ class AddBookTab(QWidget):
 
         # mniejszy layout
         self.cycki = QWidget()
-        self.dupaForm = QFormLayout()
-        self.dupaForm.addWidget(self.labelName)
-        self.dupaForm.addWidget(self.lineEditName)
-        self.dupaForm.addWidget(self.labelSurname)
-        self.dupaForm.addWidget(self.lineEditSurname)
-        self.dupaForm.addWidget(self.labelTitle)
-        self.dupaForm.addWidget(self.lineEditTitle)
-        self.dupaForm.addWidget(self.labelISBN)
-        self.dupaForm.addWidget(self.lineEditISBN)
-        self.dupaForm.addWidget(self.labelYear)
-        self.dupaForm.addWidget(self.lineEditYear)
-        self.dupaForm.addWidget(self.labelCategory)
-        self.dupaForm.addWidget(self.lineEditCategory)
-        self.dupaForm.addWidget(self.labelPublisher)
-        self.dupaForm.addWidget(self.lineEditPublisher)
-        self.cycki.setLayout(self.dupaForm)
+        self.xdForm = QFormLayout()
+        self.xdForm.addWidget(self.warning)
+        self.xdForm.addWidget(self.labelName)
+        self.xdForm.addWidget(self.lineEditName)
+        self.xdForm.addWidget(self.labelSurname)
+        self.xdForm.addWidget(self.lineEditSurname)
+        self.xdForm.addWidget(self.labelTitle)
+        self.xdForm.addWidget(self.lineEditTitle)
+        self.xdForm.addWidget(self.labelISBN)
+        self.xdForm.addWidget(self.lineEditISBN)
+        self.xdForm.addWidget(self.labelYear)
+        self.xdaForm.addWidget(self.lineEditYear)
+        self.xdForm.addWidget(self.labelCategory)
+        self.xdForm.addWidget(self.lineEditCategory)
+        self.xdForm.addWidget(self.labelPublisher)
+        self.xdForm.addWidget(self.lineEditPublisher)
+        self.de.setLayout(self.xdForm)
 
         # bardziej ogólny layout
-        self.cycekMniejszy = QWidget()
-        self.dupa = QHBoxLayout()
-        # self.spacerL = QSpacerItem(40, 10)
-        # self.dupa.addWidget(self.spacerL)
-        self.dupa.addWidget(self.cycki)
-        # self.spacerR = QSpacerItem(40, 10)
-        # self.dupa.addWidget(self.spacerR)
-        self.cycekMniejszy.setLayout(self.dupa)
+        self.cf = QWidget()
+        self.ll = QHBoxLayout()
+        self.ll.addWidget(self.de)
+        self.cf.setLayout(self.ll)
 
         self.buttonAdd = QPushButton("Dodaj książkę")
         self.buttonAdd.clicked.connect(self.on_buttonAdd_clicked)
 
         # creating main layout
         layout = QVBoxLayout()
-        layout.addWidget(self.cycekMniejszy)
+        layout.addWidget(self.cf)
         layout.addWidget(self.buttonAdd)
         self.setLayout(layout)
 
@@ -79,4 +77,10 @@ class AddBookTab(QWidget):
         Kategoria = self.lineEditCategory.text()
         Wydawnictwo = self.lineEditPublisher.text()
 
-        self.db.DodawanieKsiazki(Imie, Nazwisko, Tytul, ISBN, Rok, Kategoria, Wydawnictwo)
+        if Imie=='' or Nazwisko=='' or Tytul=='' or ISBN=='' or Rok=='' or Kategoria=='' or Wydawnictwo=='':
+            self.warning.setText("Don't leave blank lines!")
+            self.warning.setStyleSheet("QLabel {color : red; }")
+        else:
+            self.db.DodawanieKsiazki(Imie, Nazwisko, Tytul, ISBN, Rok, Kategoria, Wydawnictwo)
+            self.warning.setText("Book added to library!")
+            self.warning.setStyleSheet("QLabel {color : black; }")
