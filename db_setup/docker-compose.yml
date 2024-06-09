@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: bazy-mariadb
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=biblioteka
+      - MYSQL_USER=maciej
+      - MYSQL_PASSWORD=maciej
+      - MYSQL_ROOT_PASSWORD=maciej
+
+  adminer:
+    image: adminer
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: mariadb
+      ADMINER_DEFAULT_DB_NAME: adminer
+      ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
+    ports:
+      - 8080:8080
